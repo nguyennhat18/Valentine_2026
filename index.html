@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gửi Hoạ My - Valentine 2026</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #4a3b3b;
+            --accent-color: #c24d5d;
+            --name-color: #d63384; 
+            --line-color: #e0d1d1; /* Màu đường kẻ giấy */
+        }
+
+        body, html {
+            min-height: 100vh; 
+            margin: 0;
+            font-family: 'Lora', serif;
+            background: #fdfaf7;
+            color: var(--primary-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+        }
+
+        /* --- MÀN HÌNH CHỜ (SPLASH SCREEN) --- */
+        #splash-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(#e95050, #FAA6FF);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            transition: opacity 1.5s ease;
+        }
+
+        .photo-layout {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            justify-content: center;
+            align-items: flex-end;
+        }
+
+        .photo-slot {
+            width: 100px;
+            height: 130px;
+            background: #eee;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+            border: 3px solid #fff;
+            transform: rotate(-2deg);
+        }
+
+        .photo-slot img { width: 100%; height: 100%; object-fit: cover; }
+
+        .open-btn {
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            background-color: var(--accent-color);
+            color: #fff;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(194, 77, 93, 0.3);
+            font-family: 'Lora', serif;
+            animation: heartBeat 2s infinite ease-in-out;
+        }
+
+        @keyframes heartBeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        /* --- LÁ THƯ TÂY CÓ KẺ DÒNG --- */
+        .letter-container {
+            display: none;
+            position: relative;
+            z-index: 3;
+            max-width: 550px;
+            width: 90%;
+            padding: 40px 25px;
+            background-color: #fff;
+            box-shadow: 0 15px 45px rgba(0,0,0,0.08);
+            border-radius: 8px;
+            /* Tạo đường kẻ giấy */
+            background-image: linear-gradient(var(--line-color) 1px, transparent 1px);
+            background-size: 100% 32px;
+            line-height: 32px; 
+            font-size: 1.1rem;
+            min-height: 500px;
+        }
+
+        /* SỬA LỖI CON TRỎ: Để inline-block để con trỏ chạy theo chữ */
+        #typing-area { 
+            white-space: pre-wrap; 
+            display: inline; 
+            vertical-align: top;
+        }
+        
+        .typed-cursor { 
+            color: var(--accent-color); 
+            font-size: 1.3rem;
+            vertical-align: top;
+        }
+        
+        .special-name {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.5em;
+            color: var(--name-color);
+            display: inline-block;
+            line-height: 1;
+        }
+
+        .signature {
+            margin-top: 64px;
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.5rem;
+            color: var(--accent-color);
+            opacity: 0;
+            transition: opacity 3s ease;
+            text-align: right;
+            line-height: 1.5;
+        }
+
+        .signature.visible { opacity: 1; }
+
+        /* Hiệu ứng phụ */
+        #fireworks-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 2; }
+        .heart-balloon { position: fixed; bottom: -100px; opacity: 0.8; z-index: 1; animation: floatUpBalloon linear forwards; }
+
+        @keyframes floatUpBalloon {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.8; }
+            100% { transform: translateY(-120vh) rotate(20deg); opacity: 0; }
+        }
+
+        @media (max-width: 480px) {
+            .photo-layout { gap: 10px; }
+            .photo-slot { width: 85px; height: 110px; }
+            .letter-container { padding: 35px 20px; font-size: 1rem; line-height: 32px; }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="fireworks-canvas"></canvas>
+
+    <div id="splash-screen">
+        <div class="photo-layout">
+            <div class="photo-slot">
+                <img src="/rose.jpg" alt="Hoa">
+            </div>
+            <div class="photo-slot" style="transform: rotate(3deg) scale(1.15); z-index: 2; border-color: var(--accent-color);">
+                <img src="/My.jpg" alt="Hoạ My">
+            </div>
+            <div class="photo-slot" style="transform: rotate(-5deg);">
+                <img src="/chocolate.webp" alt="Socola">
+            </div>
+        </div>
+        <button class="open-btn" onclick="startExperience()">Mở thư từ Anh ♥</button>
+    </div>
+
+    <audio id="bg-music" loop>
+        <source src="ai ngoai anh.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="letter-container" id="main-letter">
+        <span id="typing-area"></span>
+        <div class="signature" id="signature-block">
+            Được gửi từ người luôn mong được xuất hiện trong tim và tâm trí em 🥰.
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/typed.js@2.0.16/dist/typed.umd.js"></script>
+    
+    <script>
+        // Logic Pháo hoa
+        const canvas = document.getElementById('fireworks-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor(x, y, color) {
+                this.x = x; this.y = y; this.color = color;
+                this.size = Math.random() * 2 + 1;
+                const angle = Math.random() * Math.PI * 2;
+                const speed = Math.random() * 3 + 1;
+                this.velocityX = Math.cos(angle) * speed;
+                this.velocityY = Math.sin(angle) * speed;
+                this.life = 1; this.decay = Math.random() * 0.015 + 0.01;
+            }
+            draw() {
+                ctx.fillStyle = this.color; ctx.globalAlpha = this.life;
+                ctx.beginPath();
+                const s = this.size;
+                ctx.moveTo(this.x, this.y);
+                ctx.bezierCurveTo(this.x - s, this.y - s, this.x - s*2, this.y + s/2, this.x, this.y + s*2);
+                ctx.bezierCurveTo(this.x + s*2, this.y + s/2, this.x + s, this.y - s, this.x, this.y);
+                ctx.fill();
+            }
+            update() { this.x += this.velocityX; this.y += this.velocityY; this.velocityY += 0.04; this.life -= this.decay; }
+        }
+
+        function createFirework(x, y) {
+            const colors = ['#ff4d6d', '#ff758f', '#ffffff'];
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            for (let i = 0; i < 15; i++) particles.push(new Particle(x, y, color));
+        }
+
+        function animateFireworks() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles = particles.filter(p => p.life > 0);
+            particles.forEach(p => { p.update(); p.draw(); });
+            requestAnimationFrame(animateFireworks);
+        }
+        animateFireworks();
+
+        function startExperience() {
+            document.getElementById('splash-screen').style.opacity = '0';
+            const music = document.getElementById('bg-music');
+            music.play().catch(e => console.log("Thiếu file nhạc!"));
+            
+            setTimeout(() => {
+                document.getElementById('splash-screen').style.display = 'none';
+                document.getElementById('main-letter').style.display = 'block';
+                setInterval(() => {
+                    const heart = document.createElement('div');
+                    heart.className = 'heart-balloon';
+                    heart.innerHTML = '❤️';
+                    heart.style.left = Math.random() * 100 + 'vw';
+                    heart.style.fontSize = (Math.random() * 15 + 20) + 'px';
+                    heart.style.animationDuration = (Math.random() * 5 + 6) + 's';
+                    document.body.appendChild(heart);
+                    setTimeout(() => heart.remove(), 10000);
+                }, 800);
+                startTyping();
+            }, 1000);
+        }
+
+        function startTyping() {
+            const sequence = [
+                "Hôm nay là Valentine, thú thật là anh đã suy nghĩ rất nhiều về một món quà cho em. Nhưng vì anh muốn tôn trọng không gian riêng cũng như gia đình của em...^600",
+                "Nên anh cũng không có mua hiện vật tặng em nhân dịp lễ tình nhân 14-2,^600",
+                "anh sợ phản tác dụng, nếu làm em khó xử khi phải giải thích với bố mẹ 🥲, nên anh dùng ít kĩ năng IT còn xót lại tặng em một chút tinh thần của ngày hôm nay, mong em nhận lấy nó với tâm thế vui vẻ My nhé hehe,^800",
+                "đọc tới đây chắc thấy hơi bất ngờ rồi ha. Rồi, đoàn mình di chuyển vô phần thư chính để thưởng thức ạ 😙.^1500",
+                "Gửi em <span class='special-name'>Nguyễn Kiều Hoạ My</span>\n( bố mẹ cũng khéo đặt tên quá cơ 😚 )^1500",
+                "Làm chút thơ mở bài nhé hhh^1000",
+                "Mới quen gần được tháng tròn,\nChút thương, chút nhớ vẫn còn tơ vương.\nGặp em chẳng khác trong mơ,\nĐể anh chắp bút đề thơ tặng người.\n\nThương sao ánh mắt, nụ cười,\nThương sao cái nét rạng ngời hồn nhiên.\nValentine, buổi đầu tiên,\nMong cùng em viết nên duyên sau này.^3000",
+                "Em biết không, sự tử tế là con đường anh đã chọn từ trước khi gặp em, để tự kéo mình ra khỏi những khoảng tối và áp lực cuộc sống.^1000",
+                "Nhưng khi gặp em, anh thấy lựa chọn đó ý nghĩa hơn bao giờ hết. Anh nhận ra mình không chỉ muốn sống tử tế cho bản thân, mà còn muốn dành sự tử tế đó để đồng hành cùng em.^1500",
+                "Anh biết chúng mình đều là những người hay overthinking. Nhưng thay vì để nó làm em lo lắng, hãy để anh dùng kinh nghiệm của mình \"cân\" hết những kịch bản tiêu cực đó cho em.^1200",
+                "Em cứ thoải mái làm một \"cây cổ thụ\" kiên cường, nhưng khi mỏi mệt, hãy nhớ luôn có một người sẵn sàng làm điểm tựa chắc chắn nhất cho em."
+            ];
+
+            new Typed('#typing-area', {
+                strings: sequence,
+                typeSpeed: 60,
+                backSpeed: 5,
+                smartBackspace: false,
+                backDelay: 2000,
+                contentType: 'html',
+                showCursor: true,
+                cursorChar: '|',
+                onStringTyped: () => {
+                    createFirework(Math.random() * canvas.width, Math.random() * canvas.height * 0.5);
+                },
+                onComplete: () => {
+                    document.getElementById('signature-block').classList.add('visible');
+                    for(let i=0; i<15; i++) setTimeout(() => createFirework(Math.random() * canvas.width, Math.random() * canvas.height), i * 300);
+                }
+            });
+        }
+    </script>
+</body>
+</html>
